@@ -3,7 +3,7 @@
 ## Usage
 
 ```typescript
-import { BaseHTTPClient } from 'http-client';
+import {BaseHTTPClient} from 'http-client';
 
 export class APIClient extends BaseHTTPClient {
   constructor(token?: string) {
@@ -11,12 +11,8 @@ export class APIClient extends BaseHTTPClient {
     this.token = token;
   }
 
-  setAccessToken(token: string): void {
-    this.token = token;
-  }
-
   async queryUsers() {
-    const { data } = await this.fetchWithRetry(`${BASE_URL}/users`);
+    const {data} = await this.fetch(`${BASE_URL}/users`, {timeout: 3000, maxRetries: 3});
 
     return data;
   }
