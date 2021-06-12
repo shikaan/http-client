@@ -1,9 +1,21 @@
-import { HTTPException } from './HTTPException';
-import { retry } from './retry';
+import {HTTPException} from './HTTPException';
+import {retry} from './retry';
 
-type APIResponse<T> = {
-  data: T;
-};
+type FetchOptions = Partial<{
+  method: RequestInit['method'],
+  body: RequestInit['body'],
+  headers: Record<string, string>,
+  mode: RequestInit['mode'],
+  timeout: number,
+  maxRetries: number,
+}>
+
+const DEFAULT_OPTIONS = {
+  method: 'GET',
+  mode: 'cors',
+  timeout: 3000,
+  maxRetries: 3,
+}
 
 export abstract class BaseHTTPClient {
   protected token?: string;
@@ -18,43 +30,26 @@ export abstract class BaseHTTPClient {
     };
   }
 
-  protected async request<T>(
-    url: string,
-    method = 'GET',
-    body?: unknown,
-    additionalHeaders?: Record<string, string>
-  ): Promise<T> {
-    const responseBody = await this.fetchWithRetry<APIResponse<T>>(
-      url,
-      method,
-      body,
-      additionalHeaders
-    );
-
-    return Array.isArray(responseBody.data)
-      ? ((responseBody.data.map(i => i.data) as unknown) as T)
-      : responseBody.data;
-  }
-
-  protected async fetchWithRetry<T>(
-    url: string,
-    method = 'GET',
-    body?: unknown,
-    additionalHeaders?: Record<string, string>,
-    timeout = 3000
-  ): Promise<T> {
-    return retry(
-      () => this.fetch(url, method, body, additionalHeaders, timeout),
-      { max: 3 }
-    );
+  protected setAccessToken(token: string): void {
+    this.token = token;
   }
 
   protected async fetch<T>(
     url: string,
+    options: FetchOptions
+  ): Promise<T> {
+    const opts = {...DEFAULT_OPTIONS, ...options}
+
+    return retry(() => this.doFetch(url, opts.method, opts.body, opts.headers, opts.timeout), {max: opts.maxRetries});
+  }
+
+  private async doFetch<T>(
+    url: string,
     method = 'GET',
     body?: unknown,
     additionalHeaders?: Record<string, string>,
-    timeout?: number
+    timeout?: number,
+    mode?: RequestMode
   ): Promise<T> {
     let response;
     if ('AbortController' in globalThis && timeout) {
@@ -64,15 +59,17 @@ export abstract class BaseHTTPClient {
       response = await fetch(url, {
         method,
         body: JSON.stringify(body),
-        headers: { ...this.makeAuthHeaders(), ...additionalHeaders },
+        headers: {...this.makeAuthHeaders(), ...additionalHeaders},
         signal: abortController.signal,
+        mode,
       });
       clearTimeout(timer);
     } else {
       response = await fetch(url, {
         method,
         body: JSON.stringify(body),
-        headers: { ...this.makeAuthHeaders(), ...additionalHeaders },
+        headers: {...this.makeAuthHeaders(), ...additionalHeaders},
+        mode,
       });
     }
 
