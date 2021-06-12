@@ -34,7 +34,10 @@ export abstract class BaseHTTPClient {
     this.token = token;
   }
 
-  protected async fetch<T>(url: string, options: FetchOptions): Promise<T> {
+  protected async fetch<T>(
+    url: string,
+    options: FetchOptions = {}
+  ): Promise<T> {
     const opts = { ...DEFAULT_OPTIONS, ...options };
 
     return retry(
