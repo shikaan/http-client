@@ -1,21 +1,21 @@
-import {HTTPException} from './HTTPException';
-import {retry} from './retry';
+import { HTTPException } from './HTTPException';
+import { retry } from './retry';
 
 type FetchOptions = Partial<{
-  method: RequestInit['method'],
-  body: RequestInit['body'],
-  headers: Record<string, string>,
-  mode: RequestInit['mode'],
-  timeout: number,
-  maxRetries: number,
-}>
+  method: RequestInit['method'];
+  body: any;
+  headers: Record<string, string>;
+  mode: RequestInit['mode'];
+  timeout: number;
+  maxRetries: number;
+}>;
 
 const DEFAULT_OPTIONS = {
   method: 'GET',
   mode: 'cors',
   timeout: 3000,
   maxRetries: 3,
-}
+};
 
 export abstract class BaseHTTPClient {
   protected token?: string;
@@ -34,13 +34,14 @@ export abstract class BaseHTTPClient {
     this.token = token;
   }
 
-  protected async fetch<T>(
-    url: string,
-    options: FetchOptions
-  ): Promise<T> {
-    const opts = {...DEFAULT_OPTIONS, ...options}
+  protected async fetch<T>(url: string, options: FetchOptions): Promise<T> {
+    const opts = { ...DEFAULT_OPTIONS, ...options };
 
-    return retry(() => this.doFetch(url, opts.method, opts.body, opts.headers, opts.timeout), {max: opts.maxRetries});
+    return retry(
+      () =>
+        this.doFetch(url, opts.method, opts.body, opts.headers, opts.timeout),
+      { max: opts.maxRetries }
+    );
   }
 
   private async doFetch<T>(
@@ -59,7 +60,7 @@ export abstract class BaseHTTPClient {
       response = await fetch(url, {
         method,
         body: JSON.stringify(body),
-        headers: {...this.makeAuthHeaders(), ...additionalHeaders},
+        headers: { ...this.makeAuthHeaders(), ...additionalHeaders },
         signal: abortController.signal,
         mode,
       });
@@ -68,7 +69,7 @@ export abstract class BaseHTTPClient {
       response = await fetch(url, {
         method,
         body: JSON.stringify(body),
-        headers: {...this.makeAuthHeaders(), ...additionalHeaders},
+        headers: { ...this.makeAuthHeaders(), ...additionalHeaders },
         mode,
       });
     }
