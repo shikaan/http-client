@@ -1,1 +1,1 @@
-export {BaseHTTPClient} from './BaseHTTPClient'
+export { BaseHTTPClient } from './BaseHTTPClient';

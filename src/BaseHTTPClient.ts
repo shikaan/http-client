@@ -22,12 +22,17 @@ export abstract class BaseHTTPClient {
     url: string,
     method = 'GET',
     body?: unknown,
-    additionalHeaders?: Record<string, string>,
+    additionalHeaders?: Record<string, string>
   ): Promise<T> {
-    const responseBody = await this.fetchWithRetry<APIResponse<T>>(url, method, body, additionalHeaders);
+    const responseBody = await this.fetchWithRetry<APIResponse<T>>(
+      url,
+      method,
+      body,
+      additionalHeaders
+    );
 
     return Array.isArray(responseBody.data)
-      ? (responseBody.data.map((i) => i.data) as unknown as T)
+      ? ((responseBody.data.map(i => i.data) as unknown) as T)
       : responseBody.data;
   }
 
@@ -36,9 +41,12 @@ export abstract class BaseHTTPClient {
     method = 'GET',
     body?: unknown,
     additionalHeaders?: Record<string, string>,
-    timeout = 3000,
+    timeout = 3000
   ): Promise<T> {
-    return retry(() => this.fetch(url, method, body, additionalHeaders, timeout), { max: 3 });
+    return retry(
+      () => this.fetch(url, method, body, additionalHeaders, timeout),
+      { max: 3 }
+    );
   }
 
   protected async fetch<T>(
@@ -46,7 +54,7 @@ export abstract class BaseHTTPClient {
     method = 'GET',
     body?: unknown,
     additionalHeaders?: Record<string, string>,
-    timeout?: number,
+    timeout?: number
   ): Promise<T> {
     let response;
     if ('AbortController' in globalThis && timeout) {

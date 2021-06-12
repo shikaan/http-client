@@ -1,4 +1,4 @@
-const EXCEPTION_TYPE = 'HTTPException'
+const EXCEPTION_TYPE = 'HTTPException';
 
 export class HTTPException extends Error {
   static type = EXCEPTION_TYPE;
@@ -8,7 +8,11 @@ export class HTTPException extends Error {
   type: string;
   details?: unknown;
 
-  constructor(httpErrorDTO: { status: number; message: string; details?: unknown }) {
+  constructor(httpErrorDTO: {
+    status: number;
+    message: string;
+    details?: unknown;
+  }) {
     super(httpErrorDTO.message);
     this.status = httpErrorDTO.status;
     this.message = httpErrorDTO.message;
