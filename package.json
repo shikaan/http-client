@@ -31,7 +31,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "http-client",
+  "name": "@shikaan/http-client",
   "author": "Manuel Spagnolo <spagnolo.manu@gmail.com>",
   "module": "dist/http-client.esm.js",
   "size-limit": [
