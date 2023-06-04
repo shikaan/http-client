@@ -53,7 +53,8 @@ export abstract class BaseHTTPClient {
     body?: unknown,
     additionalHeaders?: Record<string, string>,
     timeout?: number,
-    mode?: RequestMode
+    mode?: RequestMode,
+    credentials?: RequestCredentials,
   ): Promise<T> {
     let response;
     if ('AbortController' in globalThis && timeout) {
@@ -66,6 +67,7 @@ export abstract class BaseHTTPClient {
         headers: { ...this.makeAuthHeaders(), ...additionalHeaders },
         signal: abortController.signal,
         mode,
+        credentials,
       });
       clearTimeout(timer);
     } else {
