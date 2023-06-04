@@ -54,7 +54,7 @@ export abstract class BaseHTTPClient {
     additionalHeaders?: Record<string, string>,
     timeout?: number,
     mode?: RequestMode,
-    credentials?: RequestCredentials,
+    credentials?: RequestCredentials
   ): Promise<T> {
     let response;
     if ('AbortController' in globalThis && timeout) {
