@@ -6,6 +6,7 @@ type FetchOptions = Partial<{
   body: any;
   headers: Record<string, string>;
   mode: RequestInit['mode'];
+  credentials: RequestInit['credentials'];
   timeout: number;
   maxRetries: number;
 }>;
