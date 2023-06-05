@@ -14,7 +14,6 @@
     "moduleResolution": "node16",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
-    "noEmit": true
+    "outDir": "dist"
   }
 }
