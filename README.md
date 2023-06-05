@@ -1,5 +1,19 @@
 # HTTP Client
 
+Simple, opinionated, and dependency free HTTP client for the browser.
+
+## Features
+
+* Retries
+* Timeout
+* JSON based
+
+## Installation
+
+```
+npm i -E @shikaan/http-client
+```
+
 ## Usage
 
 ```typescript
