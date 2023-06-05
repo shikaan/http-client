@@ -12,7 +12,8 @@
     "node": ">=16"
   },
   "scripts": {
-    "build": "esbuild --outdir=dist --bundle --minify --sourcemap --loader:.ts=ts ./src/index.ts && tsc --emitDeclarationOnly --outDir dist",
+    "build": "esbuild --outdir=dist --bundle --minify --sourcemap --loader:.ts=ts ./src/index.ts",
+    "postbuild": "tsc --emitDeclarationOnly --outDir dist",
     "lint": "prettier -w src",
     "test": "mocha"
   },
