@@ -1,15 +1,15 @@
 import { HTTPException } from './HTTPException';
 import { retry } from './retry';
 
-describe('retry', function() {
-  it('does not retry in case of success', async function() {
+describe('retry', function () {
+  it('does not retry in case of success', async function () {
     const t = jest.fn().mockResolvedValue(null);
     await retry(t, { max: 3 });
 
     expect(t).toBeCalled();
   });
 
-  it('retries max times with Retryable exception', async function() {
+  it('retries max times with Retryable exception', async function () {
     const errorDTO = { status: 500, message: 'Internal Server Error' };
     const t = jest.fn().mockRejectedValue(new HTTPException(errorDTO));
 
@@ -17,7 +17,7 @@ describe('retry', function() {
     expect(t).toBeCalledTimes(4);
   });
 
-  it('does not retry other exceptions', async function() {
+  it('does not retry other exceptions', async function () {
     const error = new Error('message');
     const t = jest.fn().mockRejectedValue(error);
 
