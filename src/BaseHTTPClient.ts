@@ -1,5 +1,5 @@
-import { HTTPException } from './HTTPException';
-import { retry } from './retry';
+import { HTTPException } from './HTTPException.js';
+import { retry } from './retry.js';
 
 type FetchOptions = Partial<{
   method: RequestInit['method'];

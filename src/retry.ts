@@ -1,4 +1,4 @@
-import { HTTPException } from './HTTPException';
+import { HTTPException } from './HTTPException.js';
 
 interface RetryOptions {
   max: number;
