@@ -13,10 +13,15 @@ type FetchOptions = Partial<{
 
 const DEFAULT_OPTIONS = {
   method: 'GET',
-  mode: 'cors',
+  mode: 'cors' as RequestMode,
   timeout: 3000,
   maxRetries: 3,
 };
+
+const DEFAULT_HEADERS = {
+  'content-type': 'application/json',
+  'accept': 'application/json'
+}
 
 export abstract class BaseHTTPClient {
   protected token?: string;
@@ -43,7 +48,7 @@ export abstract class BaseHTTPClient {
 
     return retry(
       () =>
-        this.doFetch(url, opts.method, opts.body, opts.headers, opts.timeout),
+        this.doFetch(url, opts.method, opts.body, opts.headers, opts.timeout, opts.mode, opts.credentials),
       { max: opts.maxRetries }
     );
   }
@@ -65,7 +70,7 @@ export abstract class BaseHTTPClient {
       response = await fetch(url, {
         method,
         body: JSON.stringify(body),
-        headers: { ...this.makeAuthHeaders(), ...additionalHeaders },
+        headers: { ...this.makeAuthHeaders(), ...DEFAULT_HEADERS, ...additionalHeaders },
         signal: abortController.signal,
         mode,
         credentials,
