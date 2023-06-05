@@ -1,14 +1,14 @@
 import { HTTPException } from './HTTPException.js';
 import { retry } from './retry.js';
-import { stub, assert } from 'sinon'
-import { equal } from 'node:assert/strict'
+import { stub, assert } from 'sinon';
+import { equal } from 'node:assert/strict';
 
 describe('retry', function () {
   it('does not retry in case of success', async function () {
     const t = stub().resolves(null);
     await retry(t, { max: 3 });
 
-    assert.calledOnce(t)
+    assert.calledOnce(t);
   });
 
   it('retries max times with Retryable exception', async function () {
@@ -16,11 +16,11 @@ describe('retry', function () {
     const t = stub().rejects(new HTTPException(errorDTO));
 
     try {
-      await retry(t, { max: 3 })
-      assert.fail('Did not throw')
+      await retry(t, { max: 3 });
+      assert.fail('Did not throw');
     } catch (e: any) {
-      equal(e.message, errorDTO.message)
-      assert.callCount(t, 4)
+      equal(e.message, errorDTO.message);
+      assert.callCount(t, 4);
     }
   });
 
@@ -29,11 +29,11 @@ describe('retry', function () {
     const t = stub().rejects(error);
 
     try {
-      await retry(t, { max: 3 })
-      assert.fail('Did not throw')
+      await retry(t, { max: 3 });
+      assert.fail('Did not throw');
     } catch (e: any) {
-      equal(e, error)
-      assert.calledOnce(t)
+      equal(e, error);
+      assert.calledOnce(t);
     }
   });
 });
