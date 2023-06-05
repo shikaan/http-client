@@ -1,10 +1,10 @@
-import { HTTPException } from './HTTPException';
+import { HTTPException } from './HTTPException.js';
 
 interface RetryOptions {
   max: number;
 }
 
-const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const isHTTPException = (e: Error | HTTPException): e is HTTPException =>
   'type' in e && e.type === HTTPException.type;
 const isRetryable = (e: Error) =>
@@ -18,7 +18,7 @@ export async function retry<T>(
   const perform = async (attempt = 1): Promise<T> => {
     try {
       return await promise();
-    } catch (e) {
+    } catch (e: any) {
       if (attempt > options.max || !isRetryable(e)) {
         throw e;
       }

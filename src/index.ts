@@ -1,2 +1,2 @@
-export { BaseHTTPClient } from './BaseHTTPClient';
-export { HTTPException } from './HTTPException';
+export { BaseHTTPClient } from './BaseHTTPClient.js';
+export { HTTPException } from './HTTPException.js';
