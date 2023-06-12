@@ -43,7 +43,7 @@ export abstract class BaseHTTPClient {
   protected async fetch<T>(
     url: string,
     options: FetchOptions = {}
-  ): Promise<T> {
+  ): Promise<T| undefined> {
     const opts = { ...DEFAULT_OPTIONS, ...options };
 
     return retry(
@@ -61,8 +61,8 @@ export abstract class BaseHTTPClient {
     timeout?: number,
     mode?: RequestMode,
     credentials?: RequestCredentials
-  ): Promise<T> {
-    let response;
+  ): Promise<T | undefined> {
+    let response: Response;
     if ('AbortController' in globalThis && timeout) {
       const abortController = new AbortController();
 
@@ -83,6 +83,10 @@ export abstract class BaseHTTPClient {
         headers: { ...this.makeAuthHeaders(), ...additionalHeaders },
         mode,
       });
+    }
+
+    if (response.status === 204) {
+      return
     }
 
     const responseBody = await response.json();
