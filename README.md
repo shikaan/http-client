@@ -7,6 +7,7 @@ Simple, opinionated, and dependency free HTTP client for the browser.
 * Retries
 * Timeout
 * JSON based
+* Throws on non 2xx status codes
 
 ## Installation
 
@@ -26,9 +27,9 @@ export class APIClient extends BaseHTTPClient {
   }
 
   async queryUsers() {
-    const {data} = await this.fetch(`${BASE_URL}/users`, {timeout: 3000, maxRetries: 3});
+    const [body, headers] = await this.fetch(`${BASE_URL}/users`, {timeout: 3000, maxRetries: 3});
 
-    return data;
+    return body.data;
   }
 }
 
